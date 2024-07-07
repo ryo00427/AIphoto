@@ -1,0 +1,5 @@
+runtime: python312
+entrypoint: gunicorn -b :$PORT backend.wsgi:application
+handlers:
+  - url: .*
+    script: auto

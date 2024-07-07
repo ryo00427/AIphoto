@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryo-Portfolio</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .content-custom {
+            padding: 20px;
+        }
+        .image-scroll-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-top: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            width: 100%;
+        }
+        .image-item {
+            flex: 0 0 auto;
+            margin-right: 10px;
+        }
+        .image-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .social-login button {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+        }
+        .social-login button:hover {
+            background-color: #357AE8;
+        }
+        .social-login .icon-google {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">My Portfolio</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#home">Home<span class="sr-only">(現位置)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#about">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#work">Work</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#account">Account</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="d-lg-flex half bg-custom">
+    <div class="contents order-2 order-md-1 content-custom">
+
+        <div id="about" class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-md-7">
+                    <div class="mb-4">
+                        <h1>About</h1>
+                        <p>はじめまして、Ryoと申します。
+                        <br>高校生の時にプログラミングに興味を持ち、大学でデータサイエンスを勉強しています。
+                        <br>今まで、バックエンドを中心に学んできましたが、フロントエンドも勉強しています。
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p>-プログラミングスキル-
+                        <br>-Python
+                        <br>-Django
+                        <br>-HTML/CSS
+                        <br>-JavaScript
+                        <br>-Bootstrap
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p>-よく使うツール-
+                        <br>-ChatGPT
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="work" class="container">
+    <div class="mb-4">
+        <h2>Work</h2>
+        <p>-プログラミング作品-
+        <br>Stable Diffusion APIを使用して画像生成アプリを制作しました。
+        <br>Googleでログインするだけで使う事ができるので興味を持ったらぜひ使ってみてください。
+        <br>追記:Stability AIの無料クレジットを使い切ってしました。
+        <br>画像生成ができないのは正常です。
+        <br>金欠なのでお許しください。
+        </p>
+    </div>
+
+    <div class="social-login">
+        <button id="google-login-btn" data-url="{% url 'social:begin' 'google-oauth2' %}">
+            <span class="icon-google"></span> Googleでサインイン
+        </button>
+    </div>
+
+
+    <div class="mb-4">
+        <p>-使用した技術-
+        <br>-プログラミング言語:Python
+        <br>-フレームワーク:Django
+        <br>-データベース:PostgreSQL
+        <br>-アカウント認証:Django Rest Framework
+        <br>-Googleログイン:Google OAuth2
+        <br>-画像生成API: Stable Diffusion API
+        <br>-フロントエンド:Bootstrap, jQuery, Ajax
+        <br>-セキュリティ対策:Django CSRF Protection
+        <br>-インフラ:Google Cloud Platform
+        </p>
+    </div>
+
+    <div class="image-scroll-container">
+        <div class="image-item">
+            <img src="/static/images/image1.jpg" class="img-fluid" alt="画像1の説明">
+        </div>
+        <div class="image-item">
+            <img src="/static/images/image2.jpg" class="img-fluid" alt="画像2の説明">
+        </div>
+        <div class="image-item">
+            <img src="/static/images/image3.jpg" class="img-fluid" alt="画像3の説明">
+        </div>
+        <div class="image-item">
+            <img src="/static/images/image4.jpg" class="img-fluid" alt="画像4の説明">
+        </div>
+        <div class="image-item">
+            <img src="/static/images/image5.jpg" class="img-fluid" alt="画像5の説明">
+        </div>
+    </div>
+</div>
+
+<div id="account" class="container">
+    <div class="mb-4">
+        <h2>Account</h2>
+        <p>
+        <a href="https://github.com/ryo00427/AIphoto">このページのgithubはこちらから</a>
+        </p>
+    </div>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById('google-login-btn').addEventListener('click', function() {
+        var url = this.getAttribute('data-url');
+        window.location.href = url;
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像生成</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* スタイルの追加 */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        #generated-image {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>AIphoto</h1>
+    <p>キーワードを入力するだけで、画像を生成することができます</p>
+    <form id="image-form">
+        <label for="prompt">入力してください:</label>
+        <input type="text" id="prompt" name="prompt" required>
+        <button type="submit">生成</button>
+        {% csrf_token %}
+    </form>
+    <div id="result">
+        <img id="generated-image" src="" alt="Generated Image" style="display:none;"/>
+        <div id="error-message" class="error-message" style="display:none;"></div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $('#image-form').on('submit', function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: "{% url 'generate_image' %}",
+                    type: "POST",
+                    data: {
+                        prompt: $('#prompt').val(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(response){
+                        if(response.image_data){
+                            $('#generated-image')
+                                .attr('src', 'data:image/png;base64,' + response.image_data)
+                                .fadeIn(); // 画像をフェードイン表示
+                            $('#error-message').hide(); // エラーメッセージを非表示にする
+                        } else {
+                            $('#generated-image').hide(); // 生成画像を非表示にする
+                            $('#error-message').text('Failed to generate image. Please try again.').fadeIn(); // エラーメッセージを表示
+                        }
+                    },
+                    error: function(){
+                        $('#generated-image').hide(); // 生成画像を非表示にする
+                        $('#error-message').text('Error in generating image. Please try again later.').fadeIn(); // エラーメッセージを表示
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
