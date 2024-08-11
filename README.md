@@ -14,3 +14,6 @@ Googleログイン:Google OAuth2
 フロントエンド:Bootstrap, jQuery, Ajax
 セキュリティ対策:Django CSRF Protection
 インフラ:Google Cloud Platform
+
+よく使うツール
+chatgpt
