@@ -8,7 +8,7 @@ stable diffusion apiを活用した画像生成アプリを開発しました
 プログラミング言語:Python
 フレームワーク:Django
 データベース:PostgreSQL
-アカウント認証:Django Rest Framework
+API実装:Django Rest Framework
 Googleログイン:Google OAuth2
 画像生成API: Stable Diffusion API
 フロントエンド:Bootstrap, jQuery, Ajax
