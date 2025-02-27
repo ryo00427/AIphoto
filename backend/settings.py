@@ -14,32 +14,26 @@ import os
 import environ
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# プロジェクトのルートディレクトリを設定
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-SESSION_COOKIE_AGE = 300
 
 # 環境変数の読み込み
 env = environ.Env()
 environ.Env.read_env(env_file=os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 
-# SECRET_KEY の設定
+# SECRET_KEY（本番環境では.envファイルから読み込む）
 SECRET_KEY = env('SECRET_KEY')
 
-# Application definition
+# デバッグモード（本番環境ではFalseに設定する）
+DEBUG = True
 
+# 許可するホスト（本番環境では特定のドメインのみ許可）
+ALLOWED_HOSTS = ['*']
+
+# セッションの有効期間（秒単位）
+SESSION_COOKIE_AGE = 300
+
+# アプリケーションの定義
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,77 +41,69 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites', # 追加
+    'django.contrib.sites',  # サイト管理機能
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'social_django', 
-    'app',
+    'allauth.socialaccount.providers.google',  # Google認証用
+    'social_django',  # ソーシャル認証用
+    'app',  # ユーザー作成アプリ
 ]
 
+# ミドルウェアの設定（リクエスト処理の順序に注意）
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware', 
-    'allauth.account.middleware.AccountMiddleware',
+    'django.middleware.security.SecurityMiddleware',  # セキュリティ強化
+    'django.contrib.sessions.middleware.SessionMiddleware',  # セッション管理
+    'django.middleware.common.CommonMiddleware',  # 一般的なリクエスト処理
+    'django.middleware.csrf.CsrfViewMiddleware',  # CSRF対策
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 認証管理
+    'django.contrib.messages.middleware.MessageMiddleware',  # メッセージ管理
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',  # クリックジャッキング対策
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # ソーシャル認証の例外処理
+    'allauth.account.middleware.AccountMiddleware',  # allauthのミドルウェア
 ]
 
+# URL設定ファイルのルート
 ROOT_URLCONF = 'backend.urls'
 
+# テンプレートエンジンの設定
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # カスタムテンプレートのディレクトリ
+        'APP_DIRS': True,  # アプリごとのテンプレートを有効化
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends', 
-                'social_django.context_processors.login_redirect',
+                'social_django.context_processors.backends',  # ソーシャル認証用
+                'social_django.context_processors.login_redirect',  # ログインリダイレクト
             ],
         },
     },
 ]
 
+# WSGIアプリケーション
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-# settings.py
-
-
-    # 本番環境（GCP）
-# データベースの設定
+# データベースの設定（.env の DATABASE_URL から設定を取得）
 DATABASES = {
-    'default': env.db(),  # DATABASE_URL からデータベース設定を読み込み
+    'default': env.db(),
 }
 
+# 追加のデータベース設定
 db_from_env = env.db()
-# インポートした内容でdefaultをアップデートする
-DATABASES['default'].update
-(db_from_env)
+DATABASES['default'].update(db_from_env)
 
-
-
-
+# Djangoのセッションエンジン（データベースベースのセッション管理）
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-SOCIALACCOUNT_ADAPTER = 'path.to.MySocialAccountAdapter'  # 正しいパスに変更してください
+# allauthのカスタムアダプター（変更が必要）
+SOCIALACCOUNT_ADAPTER = 'path.to.MySocialAccountAdapter'  # 正しいパスに変更
 
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
+# パスワードバリデーション（推奨セキュリティ設定）
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -133,52 +119,51 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
+# 言語とタイムゾーンの設定
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
+# 静的ファイルの設定
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
+# デフォルトのプライマリキー
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Djangoのサイト管理用
 SITE_ID = 1
 
+# 認証バックエンドの設定（Google OAuth 2.0 を含む）
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',  # Google認証
+    'django.contrib.auth.backends.ModelBackend',  # Django標準認証
 ]
+
+# 認証URLの設定
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'login'
+
+# Google OAuth2 認証情報（環境変数から取得）
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
+# Google OAuth2 のスコープ設定（取得するユーザー情報）
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
 ]
 
+# 許可するホスト（本番環境では適切に設定）
 ALLOWED_HOSTS = ['*']
 
+# ロギングの設定（データベースのクエリをデバッグ出力）
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -196,4 +181,3 @@ LOGGING = {
         },
     },
 }
-
